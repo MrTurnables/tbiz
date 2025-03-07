@@ -21,7 +21,7 @@ export function UserButton() {
         <button 
         className="cursor-pointer p-2 w-8 h-8 bg-red-800 hover:bg-red-800/80 text-white text-lg flex items-center justify-center rounded-full"
         onClick={()=>setOpen((prev)=>!prev)}>{user && user.fullName[0].toUpperCase()}</button>
-        {open && <div className="rounded-[2px] shadow bg-white dark:bg-gray-700 w-48 absolute top-full right-0 flex flex-col">
+        {open && <div className="rounded-[2px] shadow bg-white dark:bg-gray-700 w-48 absolute z-[99] top-full right-0 flex flex-col">
             {theme === "dark" ? 
             <div 
             onClick={()=>setTheme("light")}
