@@ -12,8 +12,8 @@ const OverviewTopSection = () => {
     }, 1000);
   },[]);
   return (
-    <>
-    <div className="col-span-2">
+    <div className='flex gap-3 items-center justify-between'>
+    <div className="flex-grow h-fit">
         <DashboardTitle
         title="Dashboard" 
         subtitle={today.toLocaleDateString(undefined, {
@@ -26,13 +26,13 @@ const OverviewTopSection = () => {
         })} />
       </div>
       
-      <div className="flex flex-col">
+      <div className="flex flex-col h-fit">
         <SearchAndFilter />
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col h-fit">
         <BalanceAndNotification />
       </div>
-    </>
+    </div>
   )
 }
 

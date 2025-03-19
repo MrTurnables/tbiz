@@ -1,4 +1,5 @@
 import { useEffect, useState, useTransition } from "react";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { LoginForm } from "~/components/login-form";
 import { RegisterForm } from "~/components/register-form";
@@ -14,10 +15,15 @@ import { cn } from "~/lib/utils";
 const Onboarding = () => {
   const [isPending, startTransition] = useTransition();
   const [form, setForm] = useState<"login"|"signup"|"shop">("login");
+  const [loggingIn, setLoggingIn] = useState(false);
+  const [signingUp, setSigningUp] = useState(false);
+  const [savingShoppingDetails, setSavingShoppingDetails] = useState(false);
 
-  const { user, setUser } = useUser((state)=>state);
+  const { user, localAuth, setUser, setLocalAuth } = useUser((state)=>state);
+  const navigate = useNavigate();
 
   const submitLogin = (data:{email:string;password:string}) => {
+    setLoggingIn(true);
     startTransition(()=>{
       const url = ADMIN_LOGIN_URL;
       admin_login(url, data.email, data.password)
@@ -25,14 +31,26 @@ const Onboarding = () => {
           if(response.success){
             toast.success("Sign in successful");
             setUser(response.data);
-          }else{
-            toast.error(response.message);
+            setLocalAuth({
+              auth:data,
+              user:response.data
+            })
+          }else if(response.error){
+            toast.error("Could not reach server. Attempting local login...");
+            if(localAuth && localAuth.auth.email===data.email && localAuth.auth.password===data.password){
+              setUser(localAuth.user);
+              toast.success("Logged in using previous session. Data may not be up-to-date");
+            }else{
+              toast.error("User not found. Register an account to continue");
+            }
           }
         })
         .catch((error)=>{
-          console.log(error);
+          console.log("Login failed", error);
           toast.error("Something went wrong");
-        });
+        }).finally(()=>{
+          setLoggingIn(false);
+        })
     })
   }
 
@@ -42,6 +60,7 @@ const Onboarding = () => {
     email:string;
     password:string
   }) => {
+    setSigningUp(true);
     startTransition(()=>{
       const url = ADMIN_URL;
       admin_register(url, data)
@@ -49,6 +68,10 @@ const Onboarding = () => {
           if(response.success){
             toast.success(response.message);
             setUser(response.data);
+            setLocalAuth({
+              auth:{email:data.email,password:data.password},
+              user:response.data
+            });
           }else{
             toast.error(response.message);
           }
@@ -56,6 +79,8 @@ const Onboarding = () => {
         .catch((error)=>{
           console.log(error);
           toast.error("Something went wrong");
+        }).finally(()=>{
+          setSigningUp(false);
         });
     })
   }
@@ -70,6 +95,7 @@ const Onboarding = () => {
     country?:string;
     imageUrl?:string;
 }) => {
+    setSavingShoppingDetails(true);
     startTransition(()=>{
       const url = SHOP_URL;
       admin_shop_update(url, user?.$id || "", user?.shop.$id || "", data)
@@ -80,6 +106,14 @@ const Onboarding = () => {
             if(updatedUser){
               updatedUser.shop = response.data;
               setUser(updatedUser);
+              
+              if(localAuth){
+                setLocalAuth({
+                  auth:localAuth.auth,
+                  user:updatedUser
+                });
+              }
+              navigate("/dashboard");
             }
           }else{
             toast.error(response.message);
@@ -88,6 +122,8 @@ const Onboarding = () => {
         .catch((error)=>{
           console.log(error);
           toast.error("Something went wrong");
+        }).finally(()=>{
+          setSavingShoppingDetails(false);
         });
     });
   }
@@ -107,6 +143,7 @@ const Onboarding = () => {
       )}>
       {form !== "shop" && <div className="w-full flex items-center">
         <Button
+        disabled={isPending}
         size="lg"
         onClick={()=>setForm("login")}
         variant={form==="login" ? "default" : "outline"}
@@ -115,6 +152,7 @@ const Onboarding = () => {
         </Button>
 
         <Button
+        disabled={isPending}
         size="lg"
         onClick={()=>setForm("signup")}
         variant={form==="signup" ? "default" : "outline"}
@@ -136,9 +174,9 @@ const Onboarding = () => {
         </CardHeader>
 
         <CardContent>
-          {form==="login" && <LoginForm loading={isPending} submitLogin={submitLogin} />}
-          {form==="signup" && <RegisterForm loading={isPending} submitRegister={submitRegister} />}
-          {form==="shop" && <ShopForm loading={isPending} submitShopForm={submitShopForm} />}
+          {form==="login" && <LoginForm loading={loggingIn} submitLogin={submitLogin} />}
+          {form==="signup" && <RegisterForm loading={signingUp} submitRegister={submitRegister} />}
+          {form==="shop" && <ShopForm loading={savingShoppingDetails} submitShopForm={submitShopForm} />}
         </CardContent>
       </Card>
     </div>

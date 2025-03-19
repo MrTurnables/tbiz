@@ -1,20 +1,23 @@
-import { Bell, Wallet } from "lucide-react"
+import { Wallet } from "lucide-react"
 import { Button } from "./ui/button"
+import useSettings from "~/hooks/use-settings";
+import { formatCurrency } from "~/lib/utils";
+import useUser from "~/hooks/use-user";
+import { DEFAULT_COUNTRY } from "~/lib/data";
 
 const BalanceAndNotification = () => {
+  const { user } = useUser((state)=>state);
+  const { currency } = useSettings((state)=>state);
+
   return (
-    <div className="flex items-center justify-end gap-2">
+    <div className="flex items-center justify-end gap-2 flex-wrap">
         <p className="flex items-center gap-1 font-bold text-green-800">
             <Wallet className="w-4 h-4" />
-            <span className="text-sm">$10,000.00</span>
+            <span className="text-sm">{formatCurrency(10000,currency,user?.shop.country || DEFAULT_COUNTRY)}</span>
         </p>
         <Button className="cursor-pointer">
             <Wallet />
             <span>Withdraw</span>
-        </Button>
-        <Button variant="ghost" size="icon" className="relative cursor-pointer rounded-full w-6 h-6">
-            <Bell className="w-4 h-4" />
-            <span className="absolute -top-1 right-0 text-xs text-red-800">0</span>
         </Button>
     </div>
   )

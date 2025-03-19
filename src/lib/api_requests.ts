@@ -64,7 +64,7 @@ export const admin_register = async (url:string, data:{
     }
 }
 
-export const admin_shop_update = async (url:string, userId:string, shopId:string, data:{
+export const admin_shop_update = async (url:string, userId:string|number, shopId:string|number, data:{
     name:string;
     type:ShopType;
     description?:string;
@@ -112,6 +112,41 @@ export const admin_shop_update = async (url:string, userId:string, shopId:string
             success:false,
             data:null,
             error:error
+        }
+    }
+}
+
+export const addShopOutlet = async (url:string, data:{
+    shopId:string|number;
+    name:string;
+    address?:string;
+    city?:string;
+    country?:string;
+}) => {
+    try {
+        const {shopId,name,address,city,country} = data;
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                shopId,
+                name,
+                address: address||null,
+                city: city||null,
+                country: country||null
+            })
+        });
+        const res = await response.json();
+        return {
+            success:res.success,
+            data:res.data,
+            message:res.message
+        }
+    } catch (error) {
+        console.log("Error adding shop outlet", {error});
+        return {
+            success:false,
+            data:null,
+            message:"An error occurred"
         }
     }
 }

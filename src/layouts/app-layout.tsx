@@ -8,6 +8,8 @@ import useUser from "~/hooks/use-user";
 const AppLayout = () => {
   const {user} = useUser((state)=>state);
 
+  console.log({user});
+
   if(!user) {
     console.log("Not logged in");
     return <Navigate to="/" replace />;

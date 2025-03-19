@@ -2,10 +2,9 @@ import { Navigate, Outlet } from "react-router";
 import useUser from "~/hooks/use-user";
 
 const AuthLayout = () => {
-    const {user} = useUser((state)=>state);
+  const {user} = useUser((state)=>state);
 
-  if(user && user.shop.name && user.shop.type) {
-    console.log({user});
+  if(user && user.shop.name) {
     return <Navigate to="/dashboard" replace />;
   }
 
