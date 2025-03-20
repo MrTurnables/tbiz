@@ -1,5 +1,6 @@
 import {fetch} from '@tauri-apps/plugin-http';
 import { ShopType } from './types';
+import { ADMIN_URL, SHOP_OUTLET_URL } from './data';
 
 export const admin_login = async (url:string, email: string, password: string) => {
     try {
@@ -64,6 +65,25 @@ export const admin_register = async (url:string, data:{
     }
 }
 
+export const get_admin_user = async (id:string|number) => {
+    try {
+        const url = `${ADMIN_URL}?adminUserId=${id}`
+        const response = await fetch(url);
+        const res = await response.json();
+        return {
+            success:res.success,
+            data:res.data,
+            message:res.message
+        }
+    } catch (error) {
+        console.log("Error fetching admin user:", error);
+        return {
+            success:false,
+            data:null,
+        }
+    }
+}
+
 export const admin_shop_update = async (url:string, userId:string|number, shopId:string|number, data:{
     name:string;
     type:ShopType;
@@ -118,17 +138,19 @@ export const admin_shop_update = async (url:string, userId:string|number, shopId
 
 export const addShopOutlet = async (url:string, data:{
     shopId:string|number;
+    adminUserId:string|number;
     name:string;
     address?:string;
     city?:string;
     country?:string;
 }) => {
     try {
-        const {shopId,name,address,city,country} = data;
+        const {shopId,name,address,city,country,adminUserId} = data;
         const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify({
                 shopId,
+                adminUserId,
                 name,
                 address: address||null,
                 city: city||null,
@@ -143,6 +165,45 @@ export const addShopOutlet = async (url:string, data:{
         }
     } catch (error) {
         console.log("Error adding shop outlet", {error});
+        return {
+            success:false,
+            data:null,
+            message:"An error occurred"
+        }
+    }
+}
+
+export const editOutlet = async (id:string|number, data:{
+    name:string;
+    address:string;
+    city:string;
+    country:string;
+    shopId:string|number;
+    adminUserId:string|number;
+}) => {
+    try {
+        const url = SHOP_OUTLET_URL;
+        const response = await fetch(url, {
+            method: 'PUT',
+            body: JSON.stringify({
+                name:data.name,
+                address: data.address,
+                city: data.city,
+                country: data.country,
+                outletId:id,
+                shopId:data.shopId,
+                adminUserId:data.adminUserId,                
+            })
+        });
+        const res = await response.json();
+
+        return {
+            success:res.success,
+            data:res.data,
+            message:res.message
+        }
+    } catch (error) {
+        console.log("Error editing outlet", {error});
         return {
             success:false,
             data:null,

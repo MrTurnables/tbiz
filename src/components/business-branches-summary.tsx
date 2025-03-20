@@ -1,39 +1,65 @@
-import useUser from '~/hooks/use-user'
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { useEffect } from 'react';
+import useUser from '~/hooks/use-user';
+import AddShopOutletForm from './add-shop-outlet-form';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Separator } from './ui/separator';
 import { Button } from './ui/button';
-import { PlusIcon } from 'lucide-react';
 
 const BusinessBranchesSummary = () => {
-    const {user} = useUser((state)=>state);
+    const {user, selectedOutlet, setSelectedOutlet} = useUser((state)=>state);
+
+    useEffect(()=>{
+        if(!selectedOutlet && user?.shop && user.shop.outlets.length > 0){
+            setSelectedOutlet(user.shop.outlets[0].$id)
+        }
+    },[selectedOutlet, user])
+
+    const outlet = user?.shop.outlets.find((otl)=>otl.$id===selectedOutlet) || null;
 
   return (
-    <Card className='min-w-[160px] py-2'>
+    <Card className='min-w-[180px] py-2'>
         <CardHeader className='px-3'>
-            <CardTitle>Outlets</CardTitle>
+            <CardTitle>Outlet</CardTitle>
         </CardHeader>
         <CardContent className='flex-grow flex flex-col gap-4 px-3'>
             <div className='flex items-center gap-2'>
-                <div className='w-[40px] h-[40px] rounded-full flex items-center justify-center overflow-hidden'>
-                    {user?.shop.imageUrl ? 
-                    <img src={user.shop.imageUrl} className='w-full h-full rounded-full' />:
-                    <span className='border border-black w-full h-full rounded-full text-2xl flex items-center justify-center'>{user?.shop.name && user.shop.name[0]}</span>}
-                </div>
                 <div className='flex flex-col gap-1'>
-                    <h4>{user?.shop.name}</h4>
-                    {user?.shop.address && user.shop.city && user.shop.country && <small className='text-sm text-gray-700'>{user.shop.address}, {user.shop.city}, {user.shop.country}</small>}
+                    {outlet ?
+                    <>
+                        <h4>{outlet.name}</h4>
+                        <small className='text-sm text-gray-700 flex flex-col'>
+                            <span>{outlet.address}</span> 
+                            <span>{outlet.city}</span>
+                            <span>{outlet.country}</span>
+                        </small>
+                    </> : 
+                    null}
                 </div>
             </div>
             <Separator />
             <div className='flex-grow flex flex-col gap-2'>
+                <h5 className='font-bold'>All outlets</h5>
+                {user?.shop && user.shop.outlets.length > 0 && <div className='w-full flex flex-col gap-2'>
+                    {user.shop.outlets.map((otl)=><Button
+                    className='w-full'
+                    onClick={()=>setSelectedOutlet(otl.$id)}
+                    variant={selectedOutlet===otl.$id ? "default" : "outline"} key={otl.$id}>
+                        {otl.name}
+                    </Button>)}
+                </div>}
                 <div className='flex flex-col gap-1 items-center justify-center'>
-                    <small className='text-center max-w-[150px]'>
+                    {user?.shop && user.shop.outlets.length > 0 ? null : <small className='text-center max-w-[150px]'>
                         Add outlets here if your business has more than 1 outlet
-                    </small>
-                    <Button className='flex items-center gap-2'>
-                        <PlusIcon />
-                        <span>Add outlet</span>
-                    </Button>
+                    </small>}
+                    <AddShopOutletForm
+                        shop={user?.shop || null}
+                        initial={{
+                            name:user?.shop.name || "",
+                            address:user?.shop.address,
+                            city:user?.shop.city,
+                            country:user?.shop.country
+                        }}
+                    />
                 </div>
             </div>
         </CardContent>

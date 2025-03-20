@@ -11,6 +11,7 @@ interface UserState {
     };
     user: AuthUser | null;
   } | null;
+  selectedOutlet: string|number|null;
   setUser: (user: AuthUser|null) => void;
   setLocalAuth: (auth: {
     auth:{
@@ -19,6 +20,7 @@ interface UserState {
     };
     user: AuthUser | null;
   }) => void;
+  setSelectedOutlet:(id:string|number|null)=>void;
 }
 
 const useUser = create<UserState>()(
@@ -27,8 +29,10 @@ const useUser = create<UserState>()(
       (set) => ({
         user: null,
         localAuth:null,
+        selectedOutlet:null,
         setUser: (user) => set({ user }),
         setLocalAuth: (localAuth) => set({ localAuth }),
+        setSelectedOutlet:(id:string|number|null)=>set({selectedOutlet:id})
       }),
       { name: 'user' },
     ),

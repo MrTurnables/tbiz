@@ -1,6 +1,9 @@
 import { type ChartConfig } from "~/components/ui/chart"
 import { Invoice } from "./types";
 
+// DB Tables
+export const OUTLETS_TABLE = "outlets";
+
 export const BASE_API_URL = "https://tbiz-api.vercel.app/api/v1" as const;
 export const ADMIN_LOGIN_URL = `${BASE_API_URL}/login/admin` as const;
 export const ADMIN_URL = `${BASE_API_URL}/admin-user` as const;
@@ -103,3 +106,4 @@ export const DEFAULT_INVOICE_LIST:Invoice[] = [
   // },
 ];
 
+export const DATABASE_SYNCHRONIZATION_FILE = "sync.json";

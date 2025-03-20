@@ -11,7 +11,23 @@
     "http:default",
     {
       "identifier": "http:default",
-      "allow": [{ "url": "https://*.vercel.app" }]
-    }
+      "allow": [
+        {
+          "url": "https://*.vercel.app"
+        }
+      ]
+    },
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        { "path": "$APPDATA" },
+        { "path": "$APPDATA/**" },
+        { "path": "$APPLOCALDATA" },
+        { "path": "$APPLOCALDATA/**" }
+      ]
+    },
+    "fs:default",
+    "fs:allow-open",
+    "fs:allow-write"
   ]
 }

@@ -7,6 +7,7 @@ import AuthLayout from "./layouts/auth-layout";
 import { Toaster } from "./components/ui/sonner";
 import Inventory from "./pages/inventory";
 import Outlets from "./pages/outlets";
+import Settings from "./pages/settings";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="outlets" element={<Outlets />} />
           <Route path="inventory" element={<Inventory />} />
           <Route path="pos" element={<PointOfSale />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
       <Toaster />
