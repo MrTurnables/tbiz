@@ -1,10 +1,9 @@
-import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import useUser from '~/hooks/use-user';
-import useSettings from '~/hooks/use-settings';
-import { formatCurrency } from '~/lib/utils';
-import { DEFAULT_COUNTRY } from '~/lib/data';
 import { ArrowDownRight, ArrowUpRight } from 'lucide-react';
+import React from 'react';
+import useSettings from '~/hooks/use-settings';
+import { DEFAULT_COUNTRY } from '~/lib/data';
+import { formatCurrency } from '~/lib/utils';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
 interface SummaryValueCardProps {
     title:string;
@@ -20,7 +19,6 @@ const SummaryValueCard:React.FC<SummaryValueCardProps> = ({
     value,
     change
 }) => {
-  const { user } = useUser((state)=>state);
   const { currency } = useSettings((state)=>state);
   return (
     <Card className='flex-grow py-3 gap-1'>
@@ -29,7 +27,7 @@ const SummaryValueCard:React.FC<SummaryValueCardProps> = ({
       </CardHeader>
       <CardContent className='flex items-center flex-wrap justify-between gap-3 px-3'>
         <div className='flex flex-col gap-1'>
-          <h3 className='lg:text-base text-sm font-semibold'>{formatCurrency(value,currency,user?.shop.country || DEFAULT_COUNTRY)}</h3>
+          <h3 className='lg:text-base text-sm font-semibold'>{formatCurrency(value,currency,DEFAULT_COUNTRY)}</h3>
           {change.direction==="+" ? 
           <small className='text-green-700 flex items-center gap-1 lg:text-[10px] text-[8px]'>
             <span className='flex items-center p-1 rounded-full bg-green-700/20'>

@@ -9,7 +9,7 @@ export enum ShopOutletType {
 }
 
 export interface ClientUser {
-    $id:string|number;
+    $id:string;
     fullName: string;
     phoneNumber: string;
     email?: string;
@@ -18,7 +18,7 @@ export interface ClientUser {
 }
 
 export interface ShopOutlet {
-    $id:string|number;
+    $id:string;
     name:string;
     address?:string;
     city?:string;
@@ -27,7 +27,7 @@ export interface ShopOutlet {
 }
 
 export interface Shop {
-    $id:string|number;
+    $id:string;
     adminUsers: AuthUser;
     name:string;
     description?:string;
@@ -41,15 +41,16 @@ export interface Shop {
 }
 
 export interface AuthUser {
-    $id:string|number;
+    $id:string;
     email: string;
     fullName: string;
     phoneNumber: string;
-    shop: Shop;
+    password?: string;
+    shopId: string;
 }
 
 export type Invoice = {
-  id: string|number;
+  id: string;
   amount: number;
   status: "paid" | "pending" | "canceled";
   name: string;
@@ -124,4 +125,16 @@ export interface ItemSupplierType {
     supplerId:string;
     costPrice:string;
     leadTimeDays:number;
+}
+
+export interface BusinessProfileFormType {
+    businessName:string;
+    businessId?:string;
+    outletName?:string;
+    type:ShopOutletType;
+    description?:string;
+    address?:string;
+    website?:string;
+    city?:string;
+    country?:string;
 }

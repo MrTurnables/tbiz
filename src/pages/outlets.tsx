@@ -5,41 +5,45 @@ import ShopOutletCard from "~/components/shop-outlet-card"
 import ShopOutletInfoCard from "~/components/shop-outlet-info-card"
 import { Separator } from "~/components/ui/separator"
 import useUser from "~/hooks/use-user"
+import { ShopOutlet } from "~/lib/types"
 
 const Outlets = () => {
-    const [selectedOutlet, setSelectedOutlet] = useState<string|number|null>(null);
+    const [selectedOutlet, setSelectedOutlet] = useState<string|null>(null);
     const {user} = useUser((state)=>state);
 
-    const selectOutlet = (id:string|number) => {
+    const selectOutlet = (id:string) => {
         if(id===selectedOutlet){
             setSelectedOutlet(null);
         }else{
             setSelectedOutlet(id);
         }
     }
+
+    const outlets:ShopOutlet[] = []
   return (
     <div className="grow w-full h-full min-h-[92vh] gap-3 p-3 flex flex-col">
         <div className="flex flex-wrap items-center justify-between">
             <div>
                 <DashboardTitle 
-                    title={`Outlets (${user?.shop.outlets.length})`} 
+                    title={`Outlets (${outlets.length})`} 
                     subtitle="Set up different outlets or locations for your business." 
                 />
             </div>
             <AddShopOutletForm
-                shop={user?.shop || null}
+                shopId={user?.shopId || ""}
+                userId={user?.$id || ""}
                 initial={{
-                    name:user?.shop.name || "",
-                    address:user?.shop.address,
-                    city:user?.shop.city,
-                    country:user?.shop.country
+                    name:"",
+                    address:"",
+                    city:"",
+                    country:""
                 }}
             />
         </div>
         <Separator />
         <div className="w-full flex gap-2">
             <div className="flex-grow grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
-                {user?.shop.outlets && user.shop.outlets.length > 0 ? user.shop.outlets.map((outlet)=><ShopOutletCard 
+                {outlets.length > 0 ? outlets.map((outlet)=><ShopOutletCard 
                     key={outlet.$id}
                     outlet={outlet}
                     selectOutlet={selectOutlet}
@@ -52,7 +56,7 @@ const Outlets = () => {
 
             {selectedOutlet && <div className="w-[250px] h-full">
                 <ShopOutletInfoCard 
-                    outlet={user?.shop.outlets ? user?.shop.outlets.find((otl)=>otl.$id===selectedOutlet) : null}
+                    outlet={outlets ? outlets.find((otl)=>otl.$id===selectedOutlet) : null}
                 />
             </div>}
         </div>

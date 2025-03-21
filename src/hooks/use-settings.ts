@@ -17,7 +17,7 @@ const useSettings = create<SettingsState>()(
         setEnableOffline: (enableOffline) => set({ enableOffline }),
         setCurrency: (currency) => set({ currency }),
       }),
-      { name: 'user' },
+      { name: 'settings' },
     ),
   ),
 );

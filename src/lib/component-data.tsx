@@ -20,11 +20,10 @@ export const invoiceColumns: ColumnDef<Invoice>[] = [
         return <div className="text-right">Amount ({currency})</div>
       },
       cell: ({ row }) => {
-        const {user} = useUser((state)=>state);
         const {currency} = useSettings((state)=>state);
 
         const amount = parseFloat(row.getValue("amount"));
-        const formatted = formatCurrency(amount,currency,user?.shop.country||DEFAULT_COUNTRY,false);
+        const formatted = formatCurrency(amount,currency,DEFAULT_COUNTRY,false);
    
         return <div className="text-right font-medium">{formatted}</div>
       },

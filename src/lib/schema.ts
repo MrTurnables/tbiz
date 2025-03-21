@@ -49,3 +49,17 @@ export const shopFormSchema = z.object({
     city: z.string().optional(),
     country: z.string().optional(),
 });
+
+export const BusinessProfileFormSchema = z.object({
+  businessName: z.string().min(1, {
+    message:"Business name is required",
+  }).max(250),
+  description: z.string().optional(),
+  outletName: z.string().optional(),
+  outletType: z.string(),
+  address: z.string().optional(),
+  imageUrl: z.string().optional(),
+  website: z.string().optional(),
+  city: z.string().optional(),
+  country: z.string().optional(),
+})

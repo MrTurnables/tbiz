@@ -7,7 +7,7 @@ import { cn } from "~/lib/utils";
 interface ShopOutletCardProps {
     outlet:ShopOutlet;
     selectedOutlet:string|number|null;
-    selectOutlet:(id:string|number)=>void;
+    selectOutlet:(id:string)=>void;
 }
 
 const ShopOutletCard:React.FC<ShopOutletCardProps> = ({outlet, selectedOutlet, selectOutlet}) => {

@@ -107,6 +107,9 @@ importers:
       zustand:
         specifier: ^5.0.3
         version: 5.0.3(@types/react@18.3.18)(react@18.3.1)
+      zustand-indexeddb-storage:
+        specifier: ^1.0.0
+        version: 1.0.0
     devDependencies:
       '@tauri-apps/cli':
         specifier: ^2
@@ -1630,6 +1633,9 @@ packages:
   zod@3.24.2:
     resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
 
+  zustand-indexeddb-storage@1.0.0:
+    resolution: {integrity: sha512-NbUXd0QLh0dJoW9n59t4sQHrsUZj2AsyhVxPx5FwH89p6+d2N/8V5US9enOn6v/VVAT9Hk9WcK4rxkfXGubuyw==}
+
   zustand@5.0.3:
     resolution: {integrity: sha512-14fwWQtU3pH4dE0dOpdMiWjddcH+QzKIgk1cl8epwSE7yag43k/AD/m4L6+K7DytAOr9gGBe3/EXj9g7cdostg==}
     engines: {node: '>=12.20.0'}
@@ -2965,6 +2971,8 @@ snapshots:
     optional: true
 
   zod@3.24.2: {}
+
+  zustand-indexeddb-storage@1.0.0: {}
 
   zustand@5.0.3(@types/react@18.3.18)(react@18.3.1):
     optionalDependencies:

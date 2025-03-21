@@ -1,8 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
-import { PlusIcon } from "lucide-react"
-import { useState, useTransition } from "react"
-import { toast } from "sonner"
-import { Button } from "~/components/ui/button"
+import { PlusIcon } from "lucide-react";
+import { useState } from "react";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -11,14 +9,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "~/components/ui/dialog"
-import { Input } from "~/components/ui/input"
-import { Label } from "~/components/ui/label"
-import useUser from "~/hooks/use-user"
-import { addShopOutlet } from "~/lib/api_requests"
-import { OUTLETS_TABLE, SHOP_OUTLET_URL } from "~/lib/data"
-import { AuthUser, Shop, ShopOutlet, ShopOutletType } from "~/lib/types"
-import { addToSynchronizationQueue } from '~/lib/synchronization_queues';
+} from "~/components/ui/dialog";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 
 interface AddShopOutletFormProps {
     initial:{
@@ -27,11 +20,11 @@ interface AddShopOutletFormProps {
         city?:string;
         country?:string;
     };
-    shop:Shop|null;
+    shopId:string;
+    userId:string;
 }
 
-const AddShopOutletForm:React.FC<AddShopOutletFormProps> = ({initial, shop}) => {
-    const [_, startTransition] = useTransition();
+const AddShopOutletForm:React.FC<AddShopOutletFormProps> = ({initial, shopId, userId}) => {
     const [name, setName] = useState(initial.name);
     const [address, setAddress] = useState(initial.address||"");
     const [city, setCity] = useState(initial.city||"");
@@ -39,77 +32,18 @@ const AddShopOutletForm:React.FC<AddShopOutletFormProps> = ({initial, shop}) => 
     const [openForm, setOpenForm] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const {user,localAuth,setUser,setLocalAuth} = useUser((state)=>state);
-
     const createOutlet = () => {
         setLoading(true);
         const data = {
-            shopId:shop?.$id || "",
-            adminUserId:user?.$id || "",
+            shopId:shopId,
+            adminUserId:userId,
             name,
             address,
             city,
             country
         }
-        const url = SHOP_OUTLET_URL;
-        startTransition(()=>{
-            addShopOutlet(url, data).then((response)=>{
-                if(response.success){
-                  toast.success("Outlet created");
-                  // console.log(response.data);
-                  if(user && user.shop){
-                    const updatedUser:AuthUser = {...user};
-                    setUser(updatedUser)
-                    updatedUser.shop.outlets = [...updatedUser.shop.outlets, response.data];
-                  }
-                  if(localAuth && localAuth.user && localAuth.user.shop){
-                    const updatedLocalAuth = {auth:localAuth.auth,user:localAuth.user};
-                    updatedLocalAuth.user.shop.outlets = [...updatedLocalAuth.user.shop.outlets, response.data];
-                    }
-                }else{
-                  toast.error("Error connecting to the server.");
-                  const newOutlet:ShopOutlet = {
-                    $id:uuidv4(),
-                    name:data.name,
-                    address:data.address,
-                    city:data.city,
-                    country:data.country,
-                    type:ShopOutletType.BRANCH
-                  }
-                  if(user){
-                    const newUserData = {...user};
-                    newUserData.shop.outlets = [...newUserData.shop.outlets, newOutlet]
-                    setUser(newUserData);
-                  }
-                  if(localAuth && localAuth.user && localAuth.user.shop){
-                    const newLocalAuthData = { auth:localAuth.auth,user:localAuth.user };
-                    newLocalAuthData.user.shop.outlets = [...newLocalAuthData.user.shop.outlets, newOutlet];
-                    setLocalAuth(newLocalAuthData);
-                  }
-
-                  addToSynchronizationQueue({
-                    data,
-                    table:OUTLETS_TABLE,
-                    verb:"POST",
-                    queryParams:null,
-                    url:SHOP_OUTLET_URL
-                  }).then((success)=>{
-                    if(success){
-                      toast.success("Outlet added locally");
-                      setOpenForm(false);
-                    }
-                  }).catch((error)=>{
-                    console.log("Error adding request to synchronization queue:", error);
-                  });
-                }
-            }).catch((error:any)=>{
-                console.log({error});
-                toast.error("Something went wrong");
-            }).finally(()=>{
-                setLoading(false);
-                setOpenForm(false);
-            })
-        })
+        console.log(data);
+        // Add to outlet store
     }
 
   return (
