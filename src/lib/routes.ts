@@ -1,4 +1,4 @@
-import { ChartColumnBig, DatabaseIcon, ReceiptTextIcon, ShoppingBasketIcon, StoreIcon, TicketCheckIcon } from "lucide-react";
+import { ChartColumnBig, DatabaseIcon, ReceiptTextIcon, ShoppingBasketIcon, StoreIcon, TicketCheckIcon, User2Icon } from "lucide-react";
 
 export const sidebarRoutes = [
     {
@@ -10,6 +10,11 @@ export const sidebarRoutes = [
       title: "Outlets",
       url: "/dashboard/outlets",
       icon: StoreIcon,
+    },
+    {
+      title: "Users",
+      url: "/dashboard/users",
+      icon: User2Icon,
     },
     {
       title: "Inventory",

@@ -12,7 +12,7 @@ const Outlets = () => {
     console.log({user});
 
   return (
-    <div className="grow w-full h-full min-h-[92vh] gap-3 p-3 flex flex-col">
+    <div className="grow w-full min-h-[92vh] gap-3 p-3 flex flex-col">
         <div className="flex flex-wrap items-center justify-between">
             <div>
                 <DashboardTitle 

@@ -2,6 +2,7 @@ import { Bell } from "lucide-react";
 import { Button } from "./ui/button";
 import { SidebarTrigger } from "./ui/sidebar"
 import { UserButton } from "./user-button";
+import ToggleTheme from "./toggle-theme";
 
 const Navbar = () => {
   return (
@@ -13,6 +14,7 @@ const Navbar = () => {
               <Bell className="w-4 h-4" />
               <span className="absolute -top-1 right-0 text-xs text-red-800">0</span>
           </Button>
+          <ToggleTheme />
           <UserButton />
         </div>
     </nav>

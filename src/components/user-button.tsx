@@ -1,13 +1,10 @@
-import { LogOutIcon, MoonIcon, SunIcon } from "lucide-react";
-import { useState } from "react"
+import { LogOutIcon } from "lucide-react";
+import { useState } from "react";
 import useUser from "~/hooks/use-user";
-import { Separator } from "./ui/separator";
-import { useTheme } from "./theme-provider";
 
 export function UserButton() {
     const {user, setUser} = useUser(state=>state);
     const [open, setOpen] = useState(false);
-    const {theme, setTheme} = useTheme();
     
   return (
     <div
@@ -22,20 +19,6 @@ export function UserButton() {
         className="cursor-pointer p-2 w-8 h-8 bg-red-800 hover:bg-red-800/80 text-white text-lg flex items-center justify-center rounded-full"
         onClick={()=>setOpen((prev)=>!prev)}>{user && user.fullName[0].toUpperCase()}</button>
         {open && <div className="rounded-[2px] shadow bg-white dark:bg-gray-700 w-48 absolute z-[99] top-full right-0 flex flex-col">
-            {theme === "dark" ? 
-            <div 
-            onClick={()=>setTheme("light")}
-            tabIndex={-1} 
-            className="border-t border-gray-100 w-full p-3 flex items-center gap-2 text-black dark:text-white bg-white dark:bg-gray-700 hover:bg-gray-100 hover:dark:bg-gray-600 text-sm">
-                <SunIcon size={16} /> <span>Light mode</span>
-            </div> :
-            <div 
-            onClick={()=>setTheme("dark")}
-            tabIndex={-1} 
-            className="border-t border-gray-100 w-full p-3 flex items-center gap-2 text-black dark:text-white bg-white dark:bg-gray-700 hover:bg-gray-100 hover:dark:bg-gray-600 text-sm">
-                <MoonIcon size={16} /> <span>Dark mode</span>
-            </div>}
-            <Separator />
             <div 
             onClick={()=>setUser(null)}
             tabIndex={-1} 

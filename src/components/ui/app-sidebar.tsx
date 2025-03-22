@@ -1,10 +1,10 @@
+import { SettingsIcon } from "lucide-react";
 import { NavLink, useLocation } from "react-router";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./sidebar";
 import { sidebarRoutes } from "~/lib/routes";
-import { Settings2Icon, SettingsIcon } from "lucide-react";
-import { Separator } from "./separator";
 import CustomSheet from "../custom-sheet";
 import SettingsForm from "../SettingsForm";
+import { Separator } from "./separator";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./sidebar";
 
   export function AppSidebar() {
     const location = useLocation();

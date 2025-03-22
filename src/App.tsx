@@ -8,6 +8,9 @@ import { Toaster } from "./components/ui/sonner";
 import Inventory from "./pages/inventory";
 import Outlets from "./pages/outlets";
 import Settings from "./pages/settings";
+import UsersPage from "./pages/users-page";
+import PurchasesPage from "./pages/purchases";
+import InvoicesPage from "./pages/invoices";
 
 function App() {
   return (
@@ -22,8 +25,11 @@ function App() {
         <Route path="dashboard" element={<AppLayout />}>
           <Route index element={<Home />} />
           <Route path="outlets" element={<Outlets />} />
+          <Route path="users" element={<UsersPage />} />
           <Route path="inventory" element={<Inventory />} />
+          <Route path="purchases" element={<PurchasesPage />} />
           <Route path="pos" element={<PointOfSale />} />
+          <Route path="invoices" element={<InvoicesPage />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>

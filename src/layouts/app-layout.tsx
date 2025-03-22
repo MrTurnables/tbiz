@@ -64,23 +64,23 @@ const AppLayout = () => {
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <SidebarProvider>
         <AppSidebar />
-        <main className="w-full">
+        <main className="w-full min-h-full">
           <Navbar />
           <Outlet />
+          {setupProfileForm && 
+            <Dialog open={setupProfileForm}>
+              <DialogContent className="max-w-[840px]">
+                <DialogHeader>
+                  <DialogTitle>Business profile</DialogTitle>
+                  <DialogDescription>To continue, set up your business profile</DialogDescription>
+                </DialogHeader>
+                <SetupBusinessProfile
+                  submitProfile={saveProfile}
+                />
+              </DialogContent>
+            </Dialog>
+          }
         </main>
-        {setupProfileForm && 
-          <Dialog open={setupProfileForm}>
-            <DialogContent className="max-w-[840px]">
-              <DialogHeader>
-                <DialogTitle>Business profile</DialogTitle>
-                <DialogDescription>To continue, set up your business profile</DialogDescription>
-              </DialogHeader>
-              <SetupBusinessProfile
-                submitProfile={saveProfile}
-              />
-            </DialogContent>
-          </Dialog>
-        }
       </SidebarProvider>
     </ThemeProvider>
   )
