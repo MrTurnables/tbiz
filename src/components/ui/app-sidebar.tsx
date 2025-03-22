@@ -1,6 +1,10 @@
 import { NavLink, useLocation } from "react-router";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./sidebar";
 import { sidebarRoutes } from "~/lib/routes";
+import { Settings2Icon, SettingsIcon } from "lucide-react";
+import { Separator } from "./separator";
+import CustomSheet from "../custom-sheet";
+import SettingsForm from "../SettingsForm";
 
   export function AppSidebar() {
     const location = useLocation();
@@ -25,6 +29,25 @@ import { sidebarRoutes } from "~/lib/routes";
                     ))}
                     </SidebarMenu>
                 </SidebarGroupContent>
+            </SidebarGroup>
+            <Separator />
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <CustomSheet
+                    title="Settings"
+                    description="Update your settings"
+                    trigger={<SidebarMenuButton>
+                      <SettingsIcon className="w-4 h-4"/>
+                      <span>Settings</span>
+                    </SidebarMenuButton>}
+                    >
+                      <SettingsForm />
+                    </CustomSheet>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
             </SidebarGroup>
         </SidebarContent>
         <SidebarFooter />

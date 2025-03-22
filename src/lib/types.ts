@@ -5,7 +5,8 @@ export enum ShopType {
 
 export enum ShopOutletType {
     MAIN = "main",
-    BRANCH = "branch"
+    BRANCH = "branch",
+    WAREHOUSE="warehouse"
 }
 
 export interface ClientUser {
@@ -130,6 +131,7 @@ export interface ItemSupplierType {
 export interface BusinessProfileFormType {
     businessName:string;
     businessId?:string;
+    mainOutletId?:string;
     outletName?:string;
     type:ShopOutletType;
     description?:string;

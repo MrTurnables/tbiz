@@ -1,4 +1,4 @@
-import { SettingsIcon } from "lucide-react";
+import { Edit2Icon, EditIcon, SettingsIcon } from "lucide-react";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import useUser from "~/hooks/use-user";
@@ -11,8 +11,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
+import { cn } from "~/lib/utils";
 
-const EditOutletForm = ({ outlet }:{ outlet:ShopOutlet }) => {
+const EditOutletForm = ({ outlet, buttonPostion="absolute" }:{ outlet:ShopOutlet; buttonPostion?:"absolute"|"normal" }) => {
     const [_, startTransition] = useTransition();
     const [name, setName] = useState(outlet.name);
     const [address, setAddress] = useState(outlet.address || null);
@@ -128,10 +129,13 @@ const EditOutletForm = ({ outlet }:{ outlet:ShopOutlet }) => {
       <DialogTrigger asChild>
         <Button
         disabled={loading}
-        size="icon" 
-        variant="ghost" 
-        className="absolute top-1 right-1 cursor-pointer rounded-full w-6 h-6">
-            <SettingsIcon className="w-4 h-4"/>
+        size={buttonPostion==="absolute" ? "icon" : "default"}
+        variant={buttonPostion==="absolute" ? "ghost" : "outline"}
+        className={cn(buttonPostion==="absolute" ? 
+          "absolute top-1 right-1 cursor-pointer rounded-full w-6 h-6"
+          : "flex items-center gap-2")}>
+            <EditIcon className="w-4 h-4"/>
+            {buttonPostion==="normal" && <span>Edit</span>}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] bg-gray-50 dark:bg-gray-700">

@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { SaveIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { v4 as uuidv4 } from 'uuid';
 import { BusinessProfileFormSchema } from "~/lib/schema"
 import { BusinessProfileFormType, ShopOutletType } from "~/lib/types"
 import { Button } from "./ui/button"
@@ -9,12 +10,11 @@ import { Form, FormControl, FormField, FormItem } from "./ui/form"
 import { Input } from "./ui/input"
 import { Separator } from "./ui/separator"
 import { Textarea } from "./ui/textarea"
+import { DEFAULT_COUNTRY } from "~/lib/data";
 
 export const SetupBusinessProfile = ({
-    loading, 
     submitProfile,
 }:{
-    loading:boolean, 
     submitProfile:(values:BusinessProfileFormType)=>void;
 }) => {
     const form = useForm<z.infer<typeof BusinessProfileFormSchema>>({
@@ -27,13 +27,14 @@ export const SetupBusinessProfile = ({
             address:"",
             website:"",
             city:"",
-            country:""
+            country:DEFAULT_COUNTRY
         },
     });
 
   function onSubmit(values: z.infer<typeof BusinessProfileFormSchema>) {
     const data = {
         businessName:values.businessName,
+        businessId: uuidv4(),
         outletName: values.outletName,
         type: values.outletType as ShopOutletType,
         description:values.description,
@@ -55,7 +56,7 @@ export const SetupBusinessProfile = ({
                     return <FormItem>
                         <label htmlFor="business-name">Business name</label>
                         <FormControl>
-                            <Input disabled={loading} id="business-name" {...field} />
+                            <Input id="business-name" {...field} />
                         </FormControl>
                         {formState.errors.businessName && <p className="text-sm text-red-700 italic">
                             {formState.errors.businessName.message}
@@ -70,7 +71,7 @@ export const SetupBusinessProfile = ({
                     return <FormItem>
                         <label htmlFor="description">Description</label>
                         <FormControl>
-                            <Textarea disabled={loading} id="description" {...field} />
+                            <Textarea id="description" {...field} />
                         </FormControl>
                         {formState.errors.description && <p className="text-sm text-red-700 italic">
                             {formState.errors.description.message}
@@ -88,7 +89,7 @@ export const SetupBusinessProfile = ({
                         return <FormItem className="flex-grow">
                             <label htmlFor="outlet-name">Main outlet</label>
                             <FormControl>
-                                <Input disabled={loading} id="outlet-name" {...field} />
+                                <Input id="outlet-name" {...field} />
                             </FormControl>
                             {formState.errors.outletName && <p className="text-sm text-red-700 italic">
                                 {formState.errors.outletName.message}
@@ -103,7 +104,7 @@ export const SetupBusinessProfile = ({
                         return <FormItem className="flex-grow">
                             <label htmlFor="address">Address</label>
                             <FormControl>
-                                <Input disabled={loading} id="address" {...field} />
+                                <Input id="address" {...field} />
                             </FormControl>
                             {formState.errors.address && <p className="text-sm text-red-700 italic">
                                 {formState.errors.address.message}
@@ -121,7 +122,7 @@ export const SetupBusinessProfile = ({
                         return <FormItem className="flex-grow">
                             <label htmlFor="country">Country</label>
                             <FormControl>
-                                <Input disabled={loading} id="country" {...field} />
+                                <Input id="country" {...field} />
                             </FormControl>
                             {formState.errors.country && <p className="text-sm text-red-700 italic">
                                 {formState.errors.country.message}
@@ -136,7 +137,7 @@ export const SetupBusinessProfile = ({
                         return <FormItem className="flex-grow">
                             <label htmlFor="city">City</label>
                             <FormControl>
-                                <Input disabled={loading} id="city" {...field} />
+                                <Input id="city" {...field} />
                             </FormControl>
                             {formState.errors.city && <p className="text-sm text-red-700 italic">
                                 {formState.errors.city.message}
@@ -148,12 +149,11 @@ export const SetupBusinessProfile = ({
 
             <div className="flex gap-3 justify-end">
                 <Button 
-                    disabled={loading}
                     type="submit"
                     className="cursor-pointer flex items-center gap-2"
                 >
                     <SaveIcon className="w-4 h-4"/>
-                    <span>{loading ? "Saving..." : "Save"}</span>
+                    <span>Save</span>
                 </Button>
             </div>
         </form>

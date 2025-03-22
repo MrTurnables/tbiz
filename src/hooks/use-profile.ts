@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
+import { idbStorage } from '~/lib/storage';
 import { BusinessProfileFormType } from '~/lib/types';
 
 interface ProfileState {
@@ -14,7 +15,8 @@ const useProfile = create<ProfileState>()(
       setProfile: (profile:BusinessProfileFormType) => set({ profile }),
     }),
     { 
-      name: 'profile'
+      name: 'profile',
+      storage: createJSONStorage(() => idbStorage),
     },
   ),
 );

@@ -1,10 +1,9 @@
 import { create } from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
+import { createJSONStorage, devtools, persist } from 'zustand/middleware'
+import { idbStorage } from '~/lib/storage';
 
 interface SettingsState {
-    enableOffline:boolean;
     currency:string;
-    setEnableOffline:(flag:boolean)=>void;
     setCurrency:(currency:string)=>void;
 }
 
@@ -12,12 +11,13 @@ const useSettings = create<SettingsState>()(
   devtools(
     persist(
       (set) => ({
-        enableOffline: false,
-        currency:"GHS",
-        setEnableOffline: (enableOffline) => set({ enableOffline }),
+        currency:"GHC",
         setCurrency: (currency) => set({ currency }),
       }),
-      { name: 'settings' },
+      { 
+        name: 'settings',
+        storage: createJSONStorage(() => idbStorage),
+      },
     ),
   ),
 );

@@ -11,7 +11,6 @@ import { cn } from "~/lib/utils";
 
 const Onboarding = () => {
   const [_, startTransition] = useTransition();
-  const [form, setForm] = useState<"login"|"signup"|"shop">("login");
   const [loggingIn, setLoggingIn] = useState(false);
 
   const { user, setUser } = useUser((state)=>state);
@@ -51,13 +50,12 @@ const Onboarding = () => {
         <Button
         disabled={true}
         size="lg"
-        onClick={()=>setForm("login")}
-        variant={form==="login" ? "default" : "outline"}
+        variant="default"
         className="flex-1 cursor-pointer rounded-b-none">
           Login
         </Button>
       </div>
-      <Card className={cn("w-full", form!=="shop" && "rounded-t-none")}>
+      <Card className={cn("w-full rounded-t-none")}>
         <CardHeader className="gap-0.5">
           <CardTitle>🔐 Login</CardTitle>
           <CardDescription>

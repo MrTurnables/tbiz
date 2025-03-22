@@ -1,5 +1,6 @@
 import { PlusIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -12,6 +13,8 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import useOutlets from "~/hooks/use-outlets";
+import { ShopOutlet, ShopOutletType } from "~/lib/types";
 
 interface AddShopOutletFormProps {
     initial:{
@@ -25,31 +28,51 @@ interface AddShopOutletFormProps {
 }
 
 const AddShopOutletForm:React.FC<AddShopOutletFormProps> = ({initial, shopId, userId}) => {
-    const [name, setName] = useState(initial.name);
-    const [address, setAddress] = useState(initial.address||"");
-    const [city, setCity] = useState(initial.city||"");
-    const [country, setCountry] = useState(initial.city||"");
-    const [openForm, setOpenForm] = useState(false);
-    const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+  const [openForm, setOpenForm] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-    const createOutlet = () => {
-        setLoading(true);
-        const data = {
-            shopId:shopId,
-            adminUserId:userId,
-            name,
-            address,
-            city,
-            country
-        }
-        console.log(data);
-        // Add to outlet store
-    }
+  const {outlets, setOutlets} = useOutlets((state)=>state);
+
+  const clearForm = () => {
+    setName("");
+    setAddress("");
+    setCity("");
+    setCountry("");
+  }
+
+  const createOutlet = () => {
+    setLoading(true);
+    const data = {
+        $id:uuidv4(),
+        type:ShopOutletType.BRANCH,
+        shopId:shopId,
+        adminUserId:userId,
+        name,
+        address,
+        city,
+        country
+    } as ShopOutlet;
+    setOutlets([...outlets,data]);
+    clearForm();
+    setOpenForm(false);
+    setLoading(false);
+  }
+
+  useEffect(()=>{
+    setName(initial.name);
+    setAddress(initial.address||"");
+    setCity(initial.city||"");
+    setCountry(initial.country||"");
+  },[initial])
 
   return (
     <Dialog open={openForm} onOpenChange={(v)=>setOpenForm(v)}>
       <DialogTrigger asChild>
-        <Button className="flex items-center gap-2 cursor-pointer">
+        <Button variant="outline" className="flex items-center gap-2 cursor-pointer">
             <PlusIcon className="w-4 h-4" />
             <span>New Outlet</span>
         </Button>
