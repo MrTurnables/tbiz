@@ -1,5 +1,5 @@
-import { create } from 'zustand'
-import { createJSONStorage, devtools, persist } from 'zustand/middleware'
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 import { AuthUser } from '~/lib/types';
 
 interface UserState {
@@ -11,7 +11,6 @@ interface UserState {
     };
     user: AuthUser | null;
   } | null;
-  selectedOutlet: string|number|null;
   setUser: (user: AuthUser|null) => void;
   setLocalAuth: (auth: {
     auth:{
@@ -20,24 +19,22 @@ interface UserState {
     };
     user: AuthUser | null;
   }) => void;
-  setSelectedOutlet:(id:string|number|null)=>void;
 }
 
 const useUser = create<UserState>()(
-  persist(
-    (set) => ({
-      user: null,
-      localAuth:null,
-      selectedOutlet:null,
-      setUser: (user) => set({ user }),
-      setLocalAuth: (localAuth) => set({ localAuth }),
-      setSelectedOutlet:(id:string|number|null)=>set({selectedOutlet:id})
-    }),
-    { 
-      name: 'user',
-      storage: createJSONStorage(() => sessionStorage),
-    },
-  ),
+  devtools(
+    persist(
+      (set) => ({
+        user: null,
+        localAuth:null,
+        setUser: (user) => set({ user }),
+        setLocalAuth: (localAuth) => set({ localAuth }),
+      }),
+      { 
+        name: 'user',
+      },
+    ),
+  )
 );
 
 export default useUser;

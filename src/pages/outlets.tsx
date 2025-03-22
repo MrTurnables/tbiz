@@ -1,25 +1,16 @@
-import { useState } from "react"
 import AddShopOutletForm from "~/components/add-shop-outlet-form"
 import DashboardTitle from "~/components/dashboard-title"
 import ShopOutletCard from "~/components/shop-outlet-card"
-import ShopOutletInfoCard from "~/components/shop-outlet-info-card"
 import { Separator } from "~/components/ui/separator"
+import useOutlets from "~/hooks/use-outlets"
 import useUser from "~/hooks/use-user"
-import { ShopOutlet } from "~/lib/types"
 
 const Outlets = () => {
-    const [selectedOutlet, setSelectedOutlet] = useState<string|null>(null);
     const {user} = useUser((state)=>state);
+    const { outlets } = useOutlets((state)=>state);
 
-    const selectOutlet = (id:string) => {
-        if(id===selectedOutlet){
-            setSelectedOutlet(null);
-        }else{
-            setSelectedOutlet(id);
-        }
-    }
+    console.log({user});
 
-    const outlets:ShopOutlet[] = []
   return (
     <div className="grow w-full h-full min-h-[92vh] gap-3 p-3 flex flex-col">
         <div className="flex flex-wrap items-center justify-between">
@@ -46,19 +37,11 @@ const Outlets = () => {
                 {outlets.length > 0 ? outlets.map((outlet)=><ShopOutletCard 
                     key={outlet.$id}
                     outlet={outlet}
-                    selectOutlet={selectOutlet}
-                    selectedOutlet={selectedOutlet}
                 />) :
                 <div className="md:col-span-3 sm:col-span-2 flex flex-col items-center justify-center py-8">
                     <h4 className="text-lg font-semibold italic text-center text-gray-500">No outlets to display</h4>
                 </div>}
             </div>
-
-            {selectedOutlet && <div className="w-[250px] h-full">
-                <ShopOutletInfoCard 
-                    outlet={outlets ? outlets.find((otl)=>otl.$id===selectedOutlet) : null}
-                />
-            </div>}
         </div>
     </div>
   )

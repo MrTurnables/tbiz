@@ -10,7 +10,7 @@ export const ADMIN_URL = `${BASE_API_URL}/admin-user` as const;
 export const SHOP_URL = `${BASE_API_URL}/shop` as const;
 export const SHOP_OUTLET_URL = `${BASE_API_URL}/shop-outlet` as const;
 
-export const DEFAULT_COUNTRY = "ghana";
+export const DEFAULT_COUNTRY = "Ghana";
 
 export const DEFAULT_SALE_REPORT_DATA = [
     { month: "January", store: 186, online: 80 },
@@ -107,3 +107,14 @@ export const DEFAULT_INVOICE_LIST:Invoice[] = [
 ];
 
 export const DATABASE_SYNCHRONIZATION_FILE = "sync.json";
+
+export const CURRENCIES = [
+  {
+    label:"Ghana Cedis",
+    value:"GHC"
+  },
+  {
+    label:"Naira",
+    value:"NGN"
+  },
+]
