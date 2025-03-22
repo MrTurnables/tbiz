@@ -17,7 +17,7 @@ const InvoicesSummary = () => {
         </CardHeader>
 
         <CardContent>
-            <DataTable columns={invoiceColumns} data={DEFAULT_INVOICE_LIST} />
+            <DataTable columns={invoiceColumns} data={DEFAULT_INVOICE_LIST} filterColumn='id' />
         </CardContent>
     </Card>
   )

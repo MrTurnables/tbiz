@@ -15,7 +15,8 @@ export interface ClientUser {
     phoneNumber: string;
     email?: string;
     password: string;
-    shop: Shop;
+    shopId: string;
+    active?:boolean;
 }
 
 export interface ShopOutlet {

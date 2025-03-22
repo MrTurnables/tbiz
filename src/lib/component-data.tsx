@@ -1,12 +1,12 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Invoice } from "./types";
-import { cn, formatCurrency } from "./utils";
-import useUser from "~/hooks/use-user";
+import { ArrowUpDown, EyeIcon, MinusIcon } from "lucide-react";
+import { Link } from "react-router";
+import { Button } from "~/components/ui/button";
+import useUserAccounts from "~/hooks/use-accounts";
 import useSettings from "~/hooks/use-settings";
 import { DEFAULT_COUNTRY } from "./data";
-import { EyeIcon } from "lucide-react";
-import { Button } from "~/components/ui/button";
-import { Link } from "react-router";
+import { ClientUser, Invoice } from "./types";
+import { cn, formatCurrency } from "./utils";
 
 export const invoiceColumns: ColumnDef<Invoice>[] = [
     {
@@ -15,9 +15,14 @@ export const invoiceColumns: ColumnDef<Invoice>[] = [
     },
     {
       accessorKey: "amount",
-      header: () => {
+      header: ({column}) => {
         const {currency} = useSettings((state)=>state);
-        return <div className="text-right">Amount ({currency})</div>
+        return <div
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="text-right flex items-center gap-2 cursor-pointer">
+          <span>Amount ({currency})</span>
+          <ArrowUpDown className="w-4 h-4" />
+        </div>
       },
       cell: ({ row }) => {
         const {currency} = useSettings((state)=>state);
@@ -60,4 +65,71 @@ export const invoiceColumns: ColumnDef<Invoice>[] = [
           )
         },
       },
-  ]
+]
+
+export const userAccountsColumns: ColumnDef<ClientUser>[] = [
+  {
+    accessorKey: "id",
+    header: "#",
+    cell:({row}) => {
+      return <div>{row.index+1}</div>
+    }
+  },
+  {
+    accessorKey: "fullName",
+    header: ({ column }) => {
+      return (
+        <div
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="flex items-center gap-2 cursor-pointer"
+        >
+          <span>Name</span>
+          <ArrowUpDown className="w-4 h-4" />
+        </div>
+      )
+    },
+  }, 
+  {
+    accessorKey:"phoneNumber",
+    header: "Phone number",
+  },
+  {
+    accessorKey:"email",
+    header: "E-mail",
+  },
+  {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => {
+        const clientUser = row.original
+        const {userAccounts, editUserAccount, removeUserAccount} = useUserAccounts((state)=>state)
+
+        const toggleActivateUser = () => {
+          const currentUser = userAccounts.find((usa)=>usa.$id===clientUser.$id);
+          if(currentUser){
+            editUserAccount({...currentUser, active:!currentUser.active});
+          }
+        }
+
+        const deleteUser = () => {
+          removeUserAccount(clientUser.$id);
+        }
+        
+        return (
+          <div className="flex gap-2">
+            <Button 
+            className={cn("border w-[100px]", clientUser.active ? "border-red-700" : "border-green-800")}
+            variant={clientUser.active ? "secondary" : "ghost"}
+            onClick={toggleActivateUser}>
+              {clientUser.active ? "Deactivate" : "Activate"}
+            </Button>
+            <Button variant="destructive" onClick={deleteUser} className="flex gap-2 items-center">
+              <MinusIcon className="w-4 h-4"/>
+              <span>Delete</span>
+            </Button>
+          </div>
+        )
+      },
+    },
+]
+

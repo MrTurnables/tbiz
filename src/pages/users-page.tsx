@@ -1,9 +1,15 @@
-import { PlusIcon } from "lucide-react"
+import AddClientUserForm from "~/components/add-client-user-form"
 import DashboardTitle from "~/components/dashboard-title"
-import { Button } from "~/components/ui/button"
+import { DataTable } from "~/components/data-table"
 import { Separator } from "~/components/ui/separator"
+import useUserAccounts from "~/hooks/use-accounts"
+import useUser from "~/hooks/use-user"
+import { userAccountsColumns } from "~/lib/component-data"
 
 const UsersPage = () => {
+    const {user} = useUser((state)=>state);
+    const {userAccounts} = useUserAccounts((state)=>state);
+
   return (
     <div className="grow w-full min-h-[92vh] gap-3 p-3 flex flex-col">
         <div className="flex flex-wrap items-center justify-between">
@@ -13,14 +19,18 @@ const UsersPage = () => {
                     subtitle="Manage users." 
                 />
             </div>
-            <Button className="flex items-center gap-2">
-                <PlusIcon className="w-4 h-4"/>
-                <span>Add User</span>
-            </Button>
+            {user && <AddClientUserForm
+                shopId={user.shopId}
+                initial={{
+                    fullName:"",
+                    email:"",
+                    phoneNumber:""
+                }}
+            />}
         </div>
         <Separator />
-        <div>
-            <h1>Content</h1>
+        <div className="grow">
+            <DataTable columns={userAccountsColumns} data={userAccounts} filterColumn="fullName" />
         </div>
     </div>
   )

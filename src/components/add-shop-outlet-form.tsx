@@ -1,5 +1,6 @@
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { v4 as uuidv4 } from 'uuid';
 import { Button } from "~/components/ui/button";
 import {
@@ -46,6 +47,26 @@ const AddShopOutletForm:React.FC<AddShopOutletFormProps> = ({initial, shopId, us
 
   const createOutlet = () => {
     setLoading(true);
+    if(!name || name.trim().length === 0){
+      toast.error("Outlet name is required!");
+      setLoading(false);
+      return;
+    }
+    if(!address || address.trim().length === 0){
+      toast.error("Address is required!");
+      setLoading(false);
+      return;
+    }
+    if(!city || city.trim().length === 0){
+      toast.error("City is required!");
+      setLoading(false);
+      return;
+    }
+    if(!country || country.trim().length === 0){
+      toast.error("Country is required!");
+      setLoading(false);
+      return;
+    }
     const data = {
         $id:uuidv4(),
         type:ShopOutletType.BRANCH,
@@ -60,6 +81,7 @@ const AddShopOutletForm:React.FC<AddShopOutletFormProps> = ({initial, shopId, us
     clearForm();
     setOpenForm(false);
     setLoading(false);
+    toast.success("Outlet added successfully!");
   }
 
   useEffect(()=>{
