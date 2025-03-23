@@ -63,19 +63,20 @@ export enum ItemCategory {
     WIP = "Work-in-Progress", // Partially completed goods still in the production process.
     FINISHED_GOODS = "Finished Goods", // Completed products ready for sale.
     MRO = "Maintenance, Repair, and Operations", // Supplies used for operational needs (e.g., cleaning supplies, spare parts).
-    SAFETY_STOCK = "Safety Stock", // Extra inventory to avoid stockouts.
-    CYCLE_STOCK = "Cycle Stock", // Regular inventory needed to meet demand.
-    CONSIGNMENT_INVENTORY = "Consignment Inventory", // Goods stored by a retailer but owned by a supplier.
-    PIPELINE_INVENTORY = "Pipeline Inventory", // Goods in transit from supplier to warehouse.
-    PERISHABLE_INVENTORY = "Perishable Inventory", // Items with an expiration date (e.g., food, medicine).
+    // SAFETY_STOCK = "Safety Stock", // Extra inventory to avoid stockouts.
+    // CYCLE_STOCK = "Cycle Stock", // Regular inventory needed to meet demand.
+    // CONSIGNMENT_INVENTORY = "Consignment Inventory", // Goods stored by a retailer but owned by a supplier.
+    // PIPELINE_INVENTORY = "Pipeline Inventory", // Goods in transit from supplier to warehouse.
+    // PERISHABLE_INVENTORY = "Perishable Inventory", // Items with an expiration date (e.g., food, medicine).
 }
 
 export enum TransactionType {
-    PURCHASE = 'purchase', 
-    SALE = 'sale', 
-    RETURN = 'return', 
-    TRANSFER = 'transfer', 
-    ADJUSTMENT = 'adjustment'
+    PURCHASE = 'purchase',
+    SALE = 'sale',
+    RETURN = 'return',
+    TRANSFER = 'transfer',
+    ADJUSTMENT = 'adjustment',
+    INITIAL_STOCK = 'initial_stock'
 }
 
 export interface ItemType {
@@ -85,31 +86,111 @@ export interface ItemType {
     sku:string; // Stock keeping unit
     description?:string;
     unitPrice:string;
-    createdAt:Date;
-    updatedAt:Date;
+    createdAt:string;
+    updatedAt:string;
 }
 
-export interface InventoryEntryType {
+export interface InventoryEntry {
+    id:string;
+    sku:string; // Stock keeping unit
+    outletId:string;
+    invoiceId:string|null;
+    supplerId:string|null;
+    customerId:string|null;
+    name:string;
+    category:ItemCategory;
+    pricePerUnit:string;
+    units:number;
+    safetyStock:number; // Safety stock threshold
+    description?:string;
+    recordedAt:string;
+    createdAt:string;
+    updatedAt:string;
+}
+
+export interface OpeningStockEntry {
+    id:string;
+    itemId:string;
+    sku:string;
+    itemName:string;
+    pricePerUnit:string;
+    units:number;
+    total_stock_value:string;
+    createdAt:string;
+    updatedAt:string;
+}
+
+export interface CurrentStockEntry {
     id:string;
     itemId:string;
     outletId:string;
-    quantity:number;
-    minQuantity:number; // Safety stock threshold
-    lastUpdated:Date;
+    sku:string;
+    itemName:string;
+    pricePerUnit:string;
+    openingStock:number;
+    purchases:number;
+    sales:number;
+    closingStock:number;
+    totalStockValue:string;
+    recordedAt:string;
+    createdAt:string;
+    updatedAt:string;
 }
 
-export type InventoryType = Record<string, InventoryEntryType[]>;
+export interface PurchaseEntry {
+    id:string;
+    itemId:string;
+    transactionId:string;
+    outletId:string;
+    supplierId:string|null;
+    sku:string;
+    date:string;
+    itemName:string;
+    pricePerUnit:string;
+    units:number;
+    totalStockValue:string;
+    notes?:string;
+    createdAt:string;
+    updatedAt:string;
+}
 
-export interface TransactionEntryType {
+export interface SaleEntry {
+    id:string;
+    itemId:string;
+    transactionId:string;
+    invoiceId:string;
+    outletId:string;
+    customerId:string|null;
+    sku:string;
+    date:string;
+    itemName:string;
+    pricePerUnit:string;
+    units:number;
+    totalStockValue:string;
+    notes?:string;
+    createdAt:string;
+    updatedAt:string;
+}
+
+export interface Transaction {
     id:string;
     itemId:string;
     type:TransactionType;
-    quantity:number; // Positive for addition, negative for removal
-    fromLocationId:string|null; // Movement from outlet
-    toLocationId:string|null; // Movement to outlet
-    transactionDate:Date;
-    userId:string; // Who made the transaction
+    quantity:number; // Non-zero. +ve for stock in, -ve for stock out
+    fromLocationId:string|null;
+    toLocationId:string|null;
+    price:string;
+    transactionDate:string;
+    createdAt:string;
+    updatedAt:string;
+    notes?:string;
 }
+
+export type TrackingInventory = InventoryEntry[];
+export type OpeningStock = Record<string, OpeningStockEntry[]>;
+export type CurrentStock = Record<string, CurrentStockEntry[]|undefined>;
+export type Purchases = PurchaseEntry[];
+export type Sales = SaleEntry[];
 
 export interface SupplierType {
     id:string;
@@ -118,7 +199,8 @@ export interface SupplierType {
     phone?:string;
     email?:string;
     address?:string;
-    createdAt:Date;
+    createdAt:string;
+    updatedAt:string;
 }
 
 export interface ItemSupplierType {

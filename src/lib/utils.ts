@@ -25,3 +25,9 @@ export function formatCurrency(amount: number, currency: string, country: string
       maximumFractionDigits: 2,
   }).format(amount);
 }
+
+export const getStockStatusKey = (date=new Date()) => {
+  const todayDateTime = date;
+  const startOfToday = new Date(todayDateTime.getFullYear(), todayDateTime.getMonth(),todayDateTime.getDate());
+  return startOfToday.toISOString();
+}
