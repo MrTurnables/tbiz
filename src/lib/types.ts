@@ -9,6 +9,20 @@ export enum ShopOutletType {
     WAREHOUSE="warehouse"
 }
 
+export enum PurchaseStatus {
+    COMPLETED = "completed",
+    PENDING = "pending",
+    PARTIALLY_RECIEVED = "partially received"
+}
+
+export enum InvoiceStatus {
+    PAID = "paid",
+    PENDING = "pending",
+    PROCESSING = "processing",
+    CANCELLED = "cancelled",
+    IN_TRANSIT = "in-transit"
+}
+
 export interface ClientUser {
     $id:string;
     fullName: string;
@@ -53,8 +67,9 @@ export interface AuthUser {
 
 export type Invoice = {
   id: string;
+  customerId:string;
   amount: number;
-  status: "paid" | "pending" | "canceled";
+  status: InvoiceStatus;
   name: string;
 }
 
@@ -94,6 +109,7 @@ export interface InventoryEntry {
     id:string;
     sku:string; // Stock keeping unit
     outletId:string;
+    imageUrl?:string;
     invoiceId:string|null;
     supplerId:string|null;
     customerId:string|null;

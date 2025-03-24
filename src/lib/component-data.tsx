@@ -1,12 +1,13 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, EyeIcon, MinusIcon } from "lucide-react";
+import { ArrowUpDown, EyeIcon, MinusIcon, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import useUserAccounts from "~/hooks/use-accounts";
 import useSettings from "~/hooks/use-settings";
 import { DEFAULT_COUNTRY } from "./data";
-import { ClientUser, Invoice } from "./types";
+import { ClientUser, InventoryEntry, Invoice } from "./types";
 import { cn, formatCurrency } from "./utils";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "~/components/ui/dropdown-menu";
 
 export const invoiceColumns: ColumnDef<Invoice>[] = [
     {
@@ -133,3 +134,60 @@ export const userAccountsColumns: ColumnDef<ClientUser>[] = [
     },
 ]
 
+export const inventoryColumns: ColumnDef<InventoryEntry>[] = [
+  {
+    accessorKey: "id",
+    header: "ID",
+    cell:({row})=>{
+      const id = row.getValue("id") as string;
+      return <div>{id.substring(0,6)}</div>
+    }
+  },
+  {
+    accessorKey: "sku",
+    header: "SKU"
+  },
+  {
+    accessorKey: "name",
+    header: "Item",
+  },
+  {
+    accessorKey: "pricePerUnit",
+    header: "Price/unit",
+  },
+  {
+    accessorKey: "units",
+    header: "Avail. Quantity",
+  },
+  {
+    accessorKey: "safetyStock",
+    header: "Safety Stock",
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const id = row.getValue("id"); 
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem>
+              Copy ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>View details</DropdownMenuItem>
+            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem>Delete</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    },
+  },
+]
